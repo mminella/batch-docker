@@ -1,2 +1,4 @@
 rootProject.name = 'batch-docker'
 
+include 'job'
+include 'orchestration'

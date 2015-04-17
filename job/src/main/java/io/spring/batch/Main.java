@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.spring.batch;
+package main.java.io.spring.batch;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -48,9 +48,14 @@ public class Main {
 				.tasklet(new Tasklet() {
 					@Override
 					public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-						System.out.println("****************************************");
-						System.out.println("              HELLO WORLD!!!");
-						System.out.println("****************************************");
+						for (int i = 0; i < 120; i++) {
+							System.out.println("****************************************");
+							System.out.println("              HELLO WORLD!!!");
+							System.out.println("            Current Count: " + i + "/120");
+							System.out.println("****************************************");
+
+							Thread.sleep(1000);
+						}
 						return RepeatStatus.FINISHED;
 					}
 				}).build();
