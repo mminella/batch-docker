@@ -1,9 +1,13 @@
 buildscript {
     repositories {
-        mavenCentral()
+        maven {
+            url 'http://repo.spring.io/plugins-release'
+            mavenCentral()
+            mavenLocal()
+        }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
         classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
@@ -11,8 +15,14 @@ buildscript {
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-repositories {
-    mavenCentral()
+allprojects {
+
+    repositories {
+        mavenCentral()
+        maven { url 'http://repo.spring.io/libs-milestone' }
+        maven { url 'http://repo.spring.io/plugins-release' }
+        maven { url "https://repo.spring.io/libs-snapshot" }
+    }
 }
 
 subprojects { subproject ->
@@ -47,7 +57,6 @@ project('job') {
 
     jar {
         baseName = 'batch'
-//    version =  '0.1.0'
     }
 
     task buildDocker(type: Docker, dependsOn: build) {
@@ -64,6 +73,14 @@ project('job') {
 }
 
 project('orchestration') {
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter-web")
+        compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+        compile("io.pivotal.receptor:receptor-client:0.0.1-SNAPSHOT")
+        testCompile("org.springframework.boot:spring-boot-starter-test")
+        testCompile("junit:junit")
+    }
 }
 
 task wrapper(type: Wrapper) {

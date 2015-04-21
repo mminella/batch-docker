@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.spring.batch;
-
-import io.pivotal.receptor.client.ReceptorClient;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+package io.spring.batch.domain;
 
 /**
  * @author Michael Minella
  */
-@SpringBootApplication
-public class Main {
+public class Tag {
+	private String layer;
+	private String name;
 
-	@Bean
-	public ReceptorClient receptorClient() {
-		return new ReceptorClient();
+	public String getLayer() {
+		return layer;
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
+	public void setLayer(String layer) {
+		this.layer = layer;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
