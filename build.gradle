@@ -40,8 +40,6 @@ subprojects { subproject ->
     }
 }
 
-group = 'mminella'
-
 project('job') {
     apply plugin: 'docker'
 
@@ -51,6 +49,7 @@ project('job') {
 
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-batch")
+        compile("org.springframework.boot:spring-boot-starter-mail")
         testCompile("org.springframework.boot:spring-boot-starter-test")
         testCompile("junit:junit")
     }
@@ -58,6 +57,8 @@ project('job') {
     jar {
         baseName = 'batch'
     }
+
+    group = 'mminella'
 
     task buildDocker(type: Docker, dependsOn: build) {
         push = true

@@ -24,4 +24,6 @@ build
 .gradle
 pom.xml
 out
+job/src/main/resources/application.properties
+
 

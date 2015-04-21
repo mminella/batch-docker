@@ -67,12 +67,20 @@ public class DockerHubController {
 		TaskCreateRequest request = new TaskCreateRequest();
 		request.setTaskGuid(UUID.randomUUID().toString());
 		request.setDomain("batch");
-		request.setStack("lucid64");
-		request.setRootfs("docker:///" + repositoryName);
+		request.setRootfs("docker:///" + repositoryName + "#" + tag);
 		request.setMemoryMb(512);
 		request.setPrivileged(false);
 		request.setLogGuid(request.getTaskGuid());
 		request.setAction(action);
+		TaskCreateRequest.EgressRule rule = new TaskCreateRequest.EgressRule();
+		rule.setProtocol("all");
+		rule.setDestinations(new String[] {"74.125.202.108"});
+		TaskCreateRequest.PortRange portRange = new TaskCreateRequest.PortRange();
+		portRange.setStart(587);
+		portRange.setEnd(587);
+		rule.setPortRange(portRange);
+		request.setEgressRules(new TaskCreateRequest.EgressRule[] {rule});
+		request.setResultFile("/output.txt");
 
 		System.out.println("***********************************************************");
 		System.out.println("Launching task id " + request.getTaskGuid());
@@ -80,7 +88,7 @@ public class DockerHubController {
 
 		receptorTemplate.createTask(request);
 
-		model.addAttribute("repositorySubmitted", repositoryName);
+		model.addAttribute("repositorySubmitted", repositoryName + "#" + tag);
 
 		return list(user, model);
 	}

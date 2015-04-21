@@ -1,3 +1,3 @@
 FROM java:8
-ADD batch-0.1.0.jar app.jar
+ADD batch-0.1.0.BUILD-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

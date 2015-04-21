@@ -15,6 +15,9 @@
  */
 package main.java.io.spring.batch;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -28,6 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
  * @author Michael Minella
@@ -43,19 +49,20 @@ public class Main {
 	private StepBuilderFactory stepBuilderFactory;
 
 	@Bean
-	public Step step() {
+	public Step step(JavaMailSender mailSender) {
 		return stepBuilderFactory.get("step1")
 				.tasklet(new Tasklet() {
 					@Override
 					public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-						for (int i = 0; i < 120; i++) {
-							System.out.println("****************************************");
-							System.out.println("              HELLO WORLD!!!");
-							System.out.println("            Current Count: " + i + "/120");
-							System.out.println("****************************************");
+						SimpleMailMessage mail = new SimpleMailMessage();
 
-							Thread.sleep(1000);
-						}
+						mail.setFrom("michael.minella@lattice.cf");
+						mail.setTo("mminella@pivotal.io");
+						mail.setSubject("Direct from Lattice!");
+						mail.setText("The batch job has executed on Lattice!");
+
+						mailSender.send(mail);
+
 						return RepeatStatus.FINISHED;
 					}
 				}).build();
