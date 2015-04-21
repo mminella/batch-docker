@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Michael Minella
  */
 @Controller
+@RequestMapping("/docker")
 public class DockerHubController {
 
 	@Autowired
@@ -43,8 +44,8 @@ public class DockerHubController {
 	@Autowired
 	private ReceptorOperations receptorTemplate;
 
-	@RequestMapping("/")
-	public String list(@RequestParam String user, Model model) {
+	@RequestMapping(method = RequestMethod.GET)
+	public String list(@RequestParam("user") String user, Model model) {
 		model.addAttribute("repositories", service.getRepositoriesByUser(user));
 
 		return "docker/index";

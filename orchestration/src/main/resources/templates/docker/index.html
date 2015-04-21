@@ -14,32 +14,32 @@
         <div class="col-md-9">
             <table id="listTable" class="table">
                 <tbody>
-                <tr th:each="repository : ${repositories}">
+                <tr th:each="repository,rowStat : ${repositories}">
                     <td>
                         <div>
                             <div th:text="${repository.name}" class="text-center">Repo Name</div>
-                            <div>votes</div>
                         </div>
                     </td>
                     <td>
                         <div>
                             <div th:text="${repository.description}" class="text-center">Repo Desc</div>
-                            <div>votes</div>
                         </div>
                     </td>
-                    <!--<td class="gray">-->
-                        <!--<div th:text="${post.viewCount}" class="text-center">1</div>-->
-                        <!--<div>views</div>-->
-                    <!--</td>-->
-                    <!--<td>-->
-                        <!--<a class="bold" href="post/show.html" th:href="@{'/post/' + ${post.id}}" th:text="${post.title}">My Post</a>-->
-                        <!--<div>-->
-                            <!--<ul class="list-inline tags">-->
-                                <!--<li th:each="curTag : ${post.tags}" th:text="${curTag.tag}">My Tag</li>-->
-                            <!--</ul>-->
-                            <!--<div class="text-right gray" th:text="'asked by ' + ${post.ownerUser.displayName}">asked</div>-->
-                        <!--</div>-->
-                    <!--</td>-->
+                    <td>
+                        <div>
+                            <!--<select th:field="repoTag">-->
+                            <select id="repoTag" name="repoTag">
+                                <option th:each="tag : ${repository.tags}"
+                                        th:value="${tag.name}"
+                                        th:text="${tag.name}">Tag</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <button th:id="${'launch' + __${rowStat.index}__}" name="launch">Launch</button>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
