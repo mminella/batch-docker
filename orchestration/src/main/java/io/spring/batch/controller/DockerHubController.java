@@ -52,8 +52,11 @@ public class DockerHubController {
 	}
 
 	@RequestMapping(value = "/launch", method = RequestMethod.POST)
-	public String save(@RequestParam(value = "repositoryname", required = true) String repositoryName,
-			@RequestParam(value = "tag", required = true) String tag, Model model) throws Exception {
+	public String save(@RequestParam(value = "repositoryName", required = true) String repositoryName,
+			@RequestParam(value = "tag", required = true) String tag, @RequestParam("user") String user,
+			Model model) throws Exception {
+		System.out.println("RepositoryName = " + repositoryName);
+		System.out.println("tag = " + tag);
 		Map<String, RunAction> action = new HashMap<>();
 		RunAction runAction = new RunAction();
 		runAction.setPath("java");
@@ -71,8 +74,14 @@ public class DockerHubController {
 		request.setLogGuid(request.getTaskGuid());
 		request.setAction(action);
 
+		System.out.println("***********************************************************");
+		System.out.println("Launching task id " + request.getTaskGuid());
+		System.out.println("***********************************************************");
+
 		receptorTemplate.createTask(request);
 
-		return null;
+		model.addAttribute("repositorySubmitted", repositoryName);
+
+		return list(user, model);
 	}
 }
