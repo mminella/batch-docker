@@ -19,16 +19,15 @@ To run the demo:
 	spring.mail.properties.mail.smtp.starttls.enable=true
 	job.email.to=emailToSendTheMessageTo
 	```
-	3. Perform a `$ ./gradlew clean build buildDocker` from the root of this project.  This
-	will build all modules and push the docker image for the job to Docker Hub.
-	4. Launch the orchestration web application via `$ java -jar orchestration/build/libs/orchestration-0.1.0.BUILD-SNAPSHOT.jar`
-	5. In a browser, navigate to http://localhost:8080
-	6. In the search field, enter your username and click search.
-	7. Select the 0.1.0-BUILD-SNAPSHOT tag of the <username>/batch repository and click 
-	launch.
-	8. The orchestration app will launch the task on lattice and you will receive the 
-	email.  The status page you are taken to will refresh every 5 seconds displaying the 
-	status of the task.
+3. Perform a `$ ./gradlew clean build buildDocker` from the root of this project.  This
+   will build all modules and push the docker image for the job to Docker Hub.
+4. Launch the orchestration web application via `$ java -jar orchestration/build/libs/orchestration-0.1.0.BUILD-SNAPSHOT.jar`
+5. In a browser, navigate to http://localhost:8080
+6. In the search field, enter your username and click search.
+7. Select the 0.1.0-BUILD-SNAPSHOT tag of the <username>/batch repository and click launch.
+8. The orchestration app will launch the task on lattice and you will receive the  email.  
+   The status page you are taken to will refresh every 5 seconds displaying the status of 
+   the task.
 
 ## References
 * [Spring Batch](https://spring.io/projects/spring-batch)
