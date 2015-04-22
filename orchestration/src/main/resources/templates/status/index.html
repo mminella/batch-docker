@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="refresh" content="5; url=/status" />
+</head>
+<body>
+<div layout:fragment="content" class="container" id="listContent">
+    <div th:unless="${param.repositorySubmitted == null}" class="alert alert-success" role="alert" th:text="${param.repositorySubmitted[0]} + ' was launched.'"></div>
+    <div class="row">
+        <h2 class="col-md-6">Tasks Running</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <table id="listTable" class="table">
+                <thead>
+                    <tr>
+                        <td>Repository Name</td>
+                        <td>Task GUID</td>
+                        <td>State</td>
+                        <td>Failed</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task,rowStat : ${tasks}">
+                    <td>
+                        <div>
+                            <div th:text="${task.rootfs}" class="text-left">Repo Name</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div th:text="${task.taskGuid}" class="text-center">Task Guid</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div th:text="${task.state}" class="text-center">State</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div th:text="${task.failed}" class="text-center">Failed?</div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3"><!--img src="/images/banner1.png" alt="Think you know Spring?"/--></div>
+    </div>
+    <!--div th:include="fragments :: paginationbar"></div-->
+    <script>
+        $(window).
+    </script>
+</div>
+</body>
+</html>

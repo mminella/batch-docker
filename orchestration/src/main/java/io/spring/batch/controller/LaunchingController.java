@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/docker")
-public class DockerHubController {
+public class LaunchingController {
 
 	@Autowired
 	private DockerHubTemplate service;
@@ -55,8 +55,6 @@ public class DockerHubController {
 	public String save(@RequestParam(value = "repositoryName", required = true) String repositoryName,
 			@RequestParam(value = "tag", required = true) String tag, @RequestParam("user") String user,
 			Model model) throws Exception {
-		System.out.println("RepositoryName = " + repositoryName);
-		System.out.println("tag = " + tag);
 		Map<String, RunAction> action = new HashMap<>();
 		RunAction runAction = new RunAction();
 		runAction.setPath("java");
@@ -80,16 +78,11 @@ public class DockerHubController {
 		portRange.setEnd(587);
 		rule.setPortRange(portRange);
 		request.setEgressRules(new TaskCreateRequest.EgressRule[] {rule});
-		request.setResultFile("/output.txt");
-
-		System.out.println("***********************************************************");
-		System.out.println("Launching task id " + request.getTaskGuid());
-		System.out.println("***********************************************************");
 
 		receptorTemplate.createTask(request);
 
 		model.addAttribute("repositorySubmitted", repositoryName + "#" + tag);
 
-		return list(user, model);
+		return "redirect:/status?repositorySubmitted=" + repositoryName + "#" + tag;
 	}
 }
