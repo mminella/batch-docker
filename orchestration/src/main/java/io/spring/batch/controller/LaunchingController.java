@@ -15,14 +15,19 @@
  */
 package io.spring.batch.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import io.pivotal.dockerhub.client.DockerHubOperations;
+import io.pivotal.dockerhub.client.commands.SearchResults;
+import io.pivotal.dockerhub.client.commands.Tag;
 import io.pivotal.receptor.actions.RunAction;
 import io.pivotal.receptor.client.ReceptorOperations;
 import io.pivotal.receptor.commands.TaskCreateRequest;
-import io.spring.batch.service.DockerHubTemplate;
+import io.spring.batch.domain.Repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,14 +44,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LaunchingController {
 
 	@Autowired
-	private DockerHubTemplate service;
+	private DockerHubOperations dockerHubTemplate;
 
 	@Autowired
 	private ReceptorOperations receptorTemplate;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(@RequestParam("user") String user, Model model) {
-		model.addAttribute("repositories", service.getRepositoriesByUser(user));
+		SearchResults searchResults = dockerHubTemplate.search(user);
+
+		List<Repository> repositories = new ArrayList<>();
+		for (SearchResults.SearchResult searchResult : searchResults.getResults()) {
+			List<Tag> tags = dockerHubTemplate.getTags(searchResult.getName());
+
+			Repository repository = new Repository(searchResult.getName(), searchResult.getDescription(), tags);
+
+			repositories.add(repository);
+		}
+
+		model.addAttribute("repositories", repositories);
 
 		return "docker/index";
 	}
@@ -72,6 +88,7 @@ public class LaunchingController {
 		request.setAction(action);
 		TaskCreateRequest.EgressRule rule = new TaskCreateRequest.EgressRule();
 		rule.setProtocol("all");
+		// This IP address is the IP for smtp.gmail.com
 		rule.setDestinations(new String[] {"74.125.202.108"});
 		TaskCreateRequest.PortRange portRange = new TaskCreateRequest.PortRange();
 		portRange.setStart(587);

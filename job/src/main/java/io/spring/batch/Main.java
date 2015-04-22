@@ -17,6 +17,8 @@ package main.java.io.spring.batch;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -28,6 +30,7 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -48,18 +51,21 @@ public class Main {
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
 
+	@Value("${job.email.to}")
+	private String toAddress;
+
 	@Bean
 	public Step step(JavaMailSender mailSender) {
 		return stepBuilderFactory.get("step1")
 				.tasklet(new Tasklet() {
 					@Override
 					public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 						SimpleMailMessage mail = new SimpleMailMessage();
 
-						mail.setFrom("michael.minella@lattice.cf");
-						mail.setTo("mminella@pivotal.io");
+						mail.setTo(toAddress);
 						mail.setSubject("Direct from Lattice!");
-						mail.setText("The batch job has executed on Lattice!");
+						mail.setText(String.format("The batch job has executed on Lattice at %s!", simpleDateFormat.format(new Date())));
 
 						mailSender.send(mail);
 

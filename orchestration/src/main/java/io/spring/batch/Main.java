@@ -15,6 +15,7 @@
  */
 package io.spring.batch;
 
+import io.pivotal.dockerhub.client.DockerHubTemplate;
 import io.pivotal.receptor.client.ReceptorClient;
 
 import org.springframework.boot.SpringApplication;
@@ -30,6 +31,11 @@ public class Main {
 	@Bean
 	public ReceptorClient receptorClient() {
 		return new ReceptorClient();
+	}
+
+	@Bean
+	public DockerHubTemplate dockerHubTemplate() {
+		return new DockerHubTemplate();
 	}
 
 	public static void main(String[] args) {

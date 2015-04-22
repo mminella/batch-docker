@@ -17,6 +17,8 @@ package io.spring.batch.domain;
 
 import java.util.List;
 
+import io.pivotal.dockerhub.client.commands.Tag;
+
 /**
  * @author Michael Minella
  */

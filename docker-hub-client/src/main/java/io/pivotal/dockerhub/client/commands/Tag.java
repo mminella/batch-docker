@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.spring.batch.domain;
+package io.pivotal.dockerhub.client.commands;
 
 /**
  * @author Michael Minella

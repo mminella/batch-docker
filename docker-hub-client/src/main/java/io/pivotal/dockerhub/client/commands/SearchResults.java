@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.spring.batch.domain;
+package io.pivotal.dockerhub.client.commands;
 
 import java.util.List;
 
@@ -21,20 +21,18 @@ import java.util.List;
  * @author Michael Minella
  */
 public class SearchResults {
-
-	private int numberOfPages;
-	private int numberOfResults;
-	private int page;
-	private int pageSize;
 	private String query;
+
+	private int numberOfResults;
+
 	private List<SearchResult> results;
 
-	public int getNumberOfPages() {
-		return numberOfPages;
+	public String getQuery() {
+		return query;
 	}
 
-	public void setNumberOfPages(int numberOfPages) {
-		this.numberOfPages = numberOfPages;
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 	public int getNumberOfResults() {
@@ -45,35 +43,33 @@ public class SearchResults {
 		this.numberOfResults = numberOfResults;
 	}
 
-	public int getPage() {
-		return page;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
-
 	public List<SearchResult> getResults() {
 		return results;
 	}
 
 	public void setResults(List<SearchResult> results) {
 		this.results = results;
+	}
+
+	public static class SearchResult {
+		private String name;
+
+		private String description;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
 	}
 }

@@ -1,4 +1,5 @@
 rootProject.name = 'batch-docker'
 
 include 'job'
+include 'docker-hub-client'
 include 'orchestration'

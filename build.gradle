@@ -76,11 +76,26 @@ project('job') {
 project('orchestration') {
 
     dependencies {
+        compile project(":docker-hub-client")
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.boot:spring-boot-starter-thymeleaf")
         compile("io.pivotal.receptor:receptor-client:0.0.1-SNAPSHOT")
         testCompile("org.springframework.boot:spring-boot-starter-test")
         testCompile("junit:junit")
+    }
+}
+
+project('docker-hub-client') {
+
+    bootRepackage {
+        enabled = false
+    }
+
+    dependencies {
+        compile("com.fasterxml.jackson.core:jackson-databind:2.5.1")
+        compile("org.springframework:spring-web:4.1.5.RELEASE")
+        testCompile('org.mockito:mockito-core:1.9.5')
+        testCompile("junit:junit:4.12")
     }
 }
 

@@ -13,28 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.spring.batch.service;
+package io.pivotal.dockerhub.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.spring.batch.domain.Repository;
-import io.spring.batch.domain.SearchResult;
-import io.spring.batch.domain.SearchResults;
-import io.spring.batch.domain.Tag;
+import io.pivotal.dockerhub.client.commands.SearchResults;
+import io.pivotal.dockerhub.client.commands.Tag;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Michael Minella
  */
-@Service
-public class DockerHubTemplate {
+public class DockerHubTemplate implements DockerHubOperations {
 
 	private RestOperations restTemplate;
 
@@ -61,19 +56,13 @@ public class DockerHubTemplate {
 		this.restTemplate = restTemplate;
 	}
 
-	public List<Repository> getRepositoriesByUser(String user) {
-		SearchResults results =
-				restTemplate.getForEntity("{baseUrl}/search?q={user}", SearchResults.class, baseUrl, user).getBody();
+	@Override
+	public SearchResults search(String searchString) {
+		return restTemplate.getForEntity("{baseUrl}/search?q={user}", SearchResults.class, baseUrl, searchString).getBody();
+	}
 
-		List<Repository> repositories = new ArrayList<>();
-
-		for (SearchResult searchResult : results.getResults()) {
-			List<Tag> tags =
-					restTemplate.exchange("{baseUrl}/repositories/{name}/tags", HttpMethod.GET, null, TAGS_LIST_TYPE, baseUrl, searchResult.getName()).getBody();
-
-			repositories.add(new Repository(searchResult.getName(), searchResult.getDescription(), tags));
-		}
-
-		return repositories;
+	@Override
+	public List<Tag> getTags(String repositoryName) {
+		return restTemplate.exchange("{baseUrl}/repositories/{name}/tags", HttpMethod.GET, null, TAGS_LIST_TYPE, baseUrl, repositoryName).getBody();
 	}
 }
