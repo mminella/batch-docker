@@ -50,6 +50,11 @@ public class LaunchingController {
 	private ReceptorOperations receptorTemplate;
 
 	@RequestMapping(method = RequestMethod.GET)
+	public String search(Model model) {
+		return "docker/index";
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(@RequestParam("user") String user, Model model) {
 		SearchResults searchResults = dockerHubTemplate.search(user);
 
@@ -64,7 +69,7 @@ public class LaunchingController {
 
 		model.addAttribute("repositories", repositories);
 
-		return "docker/index";
+		return "docker/list";
 	}
 
 	@RequestMapping(value = "/launch", method = RequestMethod.POST)
@@ -89,10 +94,10 @@ public class LaunchingController {
 		TaskCreateRequest.EgressRule rule = new TaskCreateRequest.EgressRule();
 		rule.setProtocol("all");
 		// This IP address is the IP for smtp.gmail.com
-		rule.setDestinations(new String[] {"74.125.202.108"});
+		rule.setDestinations(new String[] {"74.125.202.108", "192.168.1.31"});
 		TaskCreateRequest.PortRange portRange = new TaskCreateRequest.PortRange();
 		portRange.setStart(587);
-		portRange.setEnd(587);
+		portRange.setEnd(10000);
 		rule.setPortRange(portRange);
 		request.setEgressRules(new TaskCreateRequest.EgressRule[] {rule});
 

@@ -10,7 +10,7 @@
 <div layout:fragment="content" class="container" id="listContent">
     <div th:unless="${param.repositorySubmitted == null}" class="alert alert-success" role="alert" th:text="${param.repositorySubmitted[0]} + ' was launched.'"></div>
     <div class="row">
-        <h2 class="col-md-6">Tasks Running</h2>
+        <h2>Tasks Running</h2>
     </div>
     <div class="row">
         <div class="col-md-9">

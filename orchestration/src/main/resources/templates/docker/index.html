@@ -1,74 +1,67 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorator="layout">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Spring Bach - Lattice</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div layout:fragment="content" class="container" id="listContent">
-    <div class="row">
-        <h2 class="col-md-6">Docker Hub Images</h2>
-    </div>
-    <div class="row">
-        <div class="col-md-9">
-            <table id="listTable" class="table">
-                <tbody>
-                <tr th:each="repository,rowStat : ${repositories}">
-                    <td>
-                        <div>
-                            <div th:id="${'repositoryName' + __${rowStat.index}__}" th:text="${repository.name}" class="text-center">Repo Name</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <div th:text="${repository.description}" class="text-center">Repo Desc</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <!--<select th:field="repoTag">-->
-                            <select th:id="${'repositoryTag' + __${rowStat.index}__}" th:name="${'repositoryTag' + __${rowStat.index}__}">
-                                <option th:each="tag : ${repository.tags}"
-                                        th:value="${tag.name}"
-                                        th:text="${tag.name}">Tag</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button th:id="${'launch' + __${rowStat.index}__}" name="launch">Launch</button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+<div id="mainNav" class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header col-md-2">
+                <a href="/"><img src="/images/logo-spring-io.png" alt="Spring IO"/></a>
+            </div>
+            <div class="col-md-6">&nbsp;</div>
+            <div class="col-md-2">
+                <!--<form id="search" action="/search" method="get" autocomplete="off">-->
+                <!--<input id="q" name="q" type="text" placeholder="search" value="" tabindex="1" autocomplete="off" maxlength="240" style="width: 188px; max-width: 188px;"/>-->
+                <!--</form>-->
+            </div>
+            <div class="col-md-2 text-right">
+                <!--<a href="/login.html" th:href="@{/login}" sec:authorize="not hasRole('ROLE_AUTHENTICATED')">Login</a>-->
+                <!--<div id="username" class="col-md-6 text-right" sec:authentication="name" sec:authorize="hasRole('ROLE_AUTHENTICATED')">User</div>-->
+                <!--<div class="col-md-6 text-left" sec:authorize="hasRole('ROLE_AUTHENTICATED')">-->
+                <!--<form th:action="@{/logout}" method="post">-->
+                <!--<input type="submit" value="Logout" id="logout"/>-->
+                <!--</form>-->
+                <!--</div>-->
+            </div>
         </div>
-        <div class="col-md-3"><!--img src="/images/banner1.png" alt="Think you know Spring?"/--></div>
     </div>
-    <!--div th:include="fragments :: paginationbar"></div-->
-    <form id="launchRepository" action="/docker/launch" method="post" autocomplete="off">
-        <input type="hidden" name="repositoryName" id="repositoryName"/>
-        <input type="hidden" name="tag" id="tag"/>
-        <input type="hidden" name="user" id="user" th:value="${param.user[0]}"/>
-    </form>
-
-    <script>
-        $('button').on("click", function() {
-            var index = $(this).attr('id').substring(6);
-
-            $('#repositoryName').val($('#repositoryName' + index).text());
-
-            if($('#repositoryTag' + index).val() == null) {
-                $('#tag').val($('#repositoryTag' + index + ' :nth-child(1)').val());
-            }
-            else {
-                $('#tag').val($('#repositoryTag' + index).val());
-            }
-
-            $('#launchRepository').submit();
-        });
-    </script>
 </div>
+<div class="container" id="header">
+    <div class="row">
+        <h1>
+            <!--<img src="/images/spring_logo.png"/>-->
+            <a href="/">Spring Batch - Lattice</a>
+        </h1>
+        <div>
+            <form id="search" action="/docker/list" method="get" autocomplete="off">
+                <input id="user" name="user" type="text" placeholder="search" value="" tabindex="1" autocomplete="off" maxlength="240" style="width: 188px; max-width: 188px;"/>
+                <button id="submit" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div layout:fragment="content"/>
+<footer class="footer">
+    <div class="container">
+        <div class="col-med-8">
+            <ul class="list-inline">
+                <li><a href="/team">Team</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/tools">Tools</a></li>
+            </ul>
+            &copy; <span>2014</span> <a href="http://pivotal.io">Pivotal Software</a>, Inc. All Rights Reserved.
+            <a href="http://www.pivotal.io/terms-of-use">Terms of Use</a> and
+            <a href="http://www.pivotal.io/privacy-policy">Privacy</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

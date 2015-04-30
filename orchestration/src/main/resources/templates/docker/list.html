@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div layout:fragment="content" class="container" id="listContent">
+    <div class="row">
+        <h2>Docker Hub Images</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <table id="listTable" class="table">
+                <tbody>
+                <tr th:each="repository,rowStat : ${repositories}">
+                    <td>
+                        <div>
+                            <div th:id="${'repositoryName' + __${rowStat.index}__}" th:text="${repository.name}" class="text-center">Repo Name</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div th:text="${repository.description}" class="text-center">Repo Desc</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <!--<select th:field="repoTag">-->
+                            <select th:id="${'repositoryTag' + __${rowStat.index}__}" th:name="${'repositoryTag' + __${rowStat.index}__}">
+                                <option th:each="tag : ${repository.tags}"
+                                        th:value="${tag.name}"
+                                        th:text="${tag.name}">Tag</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <button th:id="${'launch' + __${rowStat.index}__}" name="launch">Launch</button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3"><!--img src="/images/banner1.png" alt="Think you know Spring?"/--></div>
+    </div>
+    <!--div th:include="fragments :: paginationbar"></div-->
+    <form id="launchRepository" action="/docker/launch" method="post" autocomplete="off">
+        <input type="hidden" name="repositoryName" id="repositoryName"/>
+        <input type="hidden" name="tag" id="tag"/>
+        <input type="hidden" name="user" id="user" th:value="${param.user[0]}"/>
+    </form>
+
+    <script>
+        $('button').on("click", function() {
+            var index = $(this).attr('id').substring(6);
+
+            $('#repositoryName').val($('#repositoryName' + index).text());
+
+            if($('#repositoryTag' + index).val() == null) {
+                $('#tag').val($('#repositoryTag' + index + ' :nth-child(1)').val());
+            }
+            else {
+                $('#tag').val($('#repositoryTag' + index).val());
+            }
+
+            $('#launchRepository').submit();
+        });
+    </script>
+</div>
+</body>
+</html>

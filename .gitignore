@@ -25,5 +25,7 @@ build
 pom.xml
 out
 job/src/main/resources/application.properties
+orchestration/src/main/resources/batch-mysql.properties
+
 
 

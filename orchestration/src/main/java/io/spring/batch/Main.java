@@ -20,13 +20,20 @@ import io.pivotal.receptor.client.ReceptorClient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author Michael Minella
  */
-@SpringBootApplication
-public class Main {
+//@SpringBootApplication(exclude = {BatchAutoConfiguration.class, WebMvcAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@SpringBootApplication(exclude = {BatchAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@ImportResource({"classpath:/org/springframework/batch/admin/web/resources/servlet-config.xml", "classpath:/org/springframework/batch/admin/web/resources/webapp-config.xml"})
+public class Main  extends SpringBootServletInitializer {
 
 	@Bean
 	public ReceptorClient receptorClient() {
@@ -40,5 +47,14 @@ public class Main {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
+	}
+
+
+	/**
+	 * @see org.springframework.boot.context.web.SpringBootServletInitializer#configure(org.springframework.boot.builder.SpringApplicationBuilder)
+	 */
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(Main.class);
 	}
 }

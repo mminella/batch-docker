@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package main.java.io.spring.batch;
+package io.spring.batch;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +33,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
  * @author Michael Minella
@@ -57,26 +53,24 @@ public class Main {
 	@Bean
 	public Step step(JavaMailSender mailSender) {
 		return stepBuilderFactory.get("step1")
-				.tasklet(new Tasklet() {
-					@Override
-					public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-						SimpleMailMessage mail = new SimpleMailMessage();
+				.tasklet((contribution, chunkContext) -> {
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+					SimpleMailMessage mail = new SimpleMailMessage();
 
-						mail.setTo(toAddress);
-						mail.setSubject("Direct from Lattice!");
-						mail.setText(String.format("The batch job has executed on Lattice at %s!", simpleDateFormat.format(new Date())));
+					mail.setTo(toAddress);
+					mail.setSubject(String.format("Direct from %s!", InetAddress.getLocalHost().getHostAddress()));
+					mail.setText(String.format("The batch job has executed on Lattice on %s!", simpleDateFormat.format(new Date())));
 
-						mailSender.send(mail);
+					mailSender.send(mail);
 
-						return RepeatStatus.FINISHED;
-					}
+					return RepeatStatus.FINISHED;
 				}).build();
 	}
 
 	@Bean
 	public Job job(Step step) {
-		return jobBuilderFactory.get("job1")
+		return jobBuilderFactory.get("lattice-email-job")
+				.incrementer(new RunIdIncrementer())
 				.start(step)
 				.build();
 	}
