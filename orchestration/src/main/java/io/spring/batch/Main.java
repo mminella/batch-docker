@@ -30,7 +30,6 @@ import org.springframework.context.annotation.ImportResource;
 /**
  * @author Michael Minella
  */
-//@SpringBootApplication(exclude = {BatchAutoConfiguration.class, WebMvcAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @SpringBootApplication(exclude = {BatchAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @ImportResource({"classpath:/org/springframework/batch/admin/web/resources/servlet-config.xml", "classpath:/org/springframework/batch/admin/web/resources/webapp-config.xml"})
 public class Main  extends SpringBootServletInitializer {
